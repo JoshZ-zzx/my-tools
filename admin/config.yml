@@ -1,0 +1,17 @@
+backend:
+  name: github
+  repo: 你的用户名/仓库名  # 例如: josh-zhang/my-tools
+  branch: main
+
+media_folder: "images" # 图片存放路径
+public_folder: "/images"
+
+collections:
+  - name: "links"
+    label: "快捷链接管理"
+    files:
+      - file: "index.html"
+        label: "首页导航"
+        name: "home"
+        fields:
+          - { label: "网页正文内容", name: "body", widget: "markdown" }
