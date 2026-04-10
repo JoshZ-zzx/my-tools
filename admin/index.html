@@ -3,21 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <title>Josh's Admin</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/netlify-identity-widget@1.19.2/build/netlify-identity-widget.min.js"></script>
 </head>
 <body>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.init({
-          APIConfig: {
-            api_url: 'https://inspiring-cat-299a60.netlify.app/.netlify/identity'
-          }
-        });
+    window.netlifyIdentity.init({
+      APIConfig: {
+        api_url: 'https://inspiring-cat-299a60.netlify.app/.netlify/identity'
       }
+    });
+    window.netlifyIdentity.on('login', () => {
+      window.location.reload();
     });
   </script>
   
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
