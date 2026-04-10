@@ -2,45 +2,50 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Josh's Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Manager</title>
+  <meta name="google" content="notranslate" />
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+  <script>
+    // 3. 【核心】告诉 CMS：闭嘴，等我手动初始化，不要自己乱跑找 config.yml
+    window.CMS_MANUAL_INIT = true;
+  </script>
+
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
   <script>
-    // 3. 核心逻辑：在 CMS 启动前，强行定义后端参数
-    const config = {
-      backend: {
-        name: 'git-gateway',
-        repo: 'zhangzhanxi/my-tools', // 确认仓库名无误
-        branch: 'main',
-        site_domain: 'inspiring-cat-299a60.netlify.app' // 强制指向 Netlify
-      },
-      media_folder: "images",
-      public_folder: "/images",
-      collections: [
-        {
-          name: "links",
-          label: "Links",
-          files: [
-            {
-              file: "index.html",
-              label: "Home",
-              name: "home",
-              fields: [
-                { label: "Body", name: "body", widget: "code", default_language: "html" }
-              ]
-            }
-          ]
-        }
-      ]
-    };
+    // 5. 手动注入所有配置（彻底解决 404 问题）
+    CMS.init({
+      config: {
+        backend: {
+          name: 'git-gateway',
+          repo: 'JoshZ-zzx/JoshZ-zzx.github.io', // 如果你的仓库名改了，请务必修改这里
+          branch: 'main',
+          site_domain: 'inspiring-cat-299a60.netlify.app', // 强制指向 Netlify 域名
+        },
+        display_url: "https://joshzhangzzx.top",
+        media_folder: "images",
+        public_folder: "/images",
+        collections: [
+          {
+            name: "blog",
+            label: "Blog Posts",
+            folder: "_posts",
+            create: true,
+            slug: "{{year}}-{{month}}-{{day}}-{{slug}}",
+            fields: [
+              { label: "Title", name: "title", widget: "string" },
+              { label: "Publish Date", name: "date", widget: "datetime" },
+              { label: "Body", name: "body", widget: "markdown" }
+            ]
+          }
+        ]
+      }
+    });
 
-    // 4. 手动触发初始化
-    CMS.init({ config });
-
-    // 5. 强制修正 Identity 弹窗地址
+    // 6. 强制校准登录框地址
     window.netlifyIdentity.on('init', () => {
       window.netlifyIdentity.setApiUrl('https://inspiring-cat-299a60.netlify.app/.netlify/identity');
     });
