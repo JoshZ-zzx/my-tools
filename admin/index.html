@@ -3,31 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <title>Josh's Admin</title>
-  
-  <link rel="mask-icon" href="https://inspiring-cat-299a60.netlify.app/.netlify/identity">
-  <link rel="origin" href="https://inspiring-cat-299a60.netlify.app">
-
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <script>
-    // 在全局作用域强制注入地址，防止 store.js 去猜
-    window.netlifyIdentity = window.netlifyIdentity || {};
-    
-    // 强制清理之前的错误缓存
-    localStorage.removeItem('netlifySiteURL');
-    localStorage.setItem('netlifySiteURL', 'https://inspiring-cat-299a60.netlify.app');
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
-    // 监听初始化
-    document.addEventListener('DOMContentLoaded', () => {
-      window.netlifyIdentity.init({
-        APIConfig: {
-          api_url: 'https://inspiring-cat-299a60.netlify.app/.netlify/identity'
+  <script>
+    // 3. 核心逻辑：在 CMS 启动前，强行定义后端参数
+    const config = {
+      backend: {
+        name: 'git-gateway',
+        repo: 'zhangzhanxi/my-tools', // 确认仓库名无误
+        branch: 'main',
+        site_domain: 'inspiring-cat-299a60.netlify.app' // 强制指向 Netlify
+      },
+      media_folder: "images",
+      public_folder: "/images",
+      collections: [
+        {
+          name: "links",
+          label: "Links",
+          files: [
+            {
+              file: "index.html",
+              label: "Home",
+              name: "home",
+              fields: [
+                { label: "Body", name: "body", widget: "code", default_language: "html" }
+              ]
+            }
+          ]
         }
-      });
+      ]
+    };
+
+    // 4. 手动触发初始化
+    CMS.init({ config });
+
+    // 5. 强制修正 Identity 弹窗地址
+    window.netlifyIdentity.on('init', () => {
+      window.netlifyIdentity.setApiUrl('https://inspiring-cat-299a60.netlify.app/.netlify/identity');
     });
   </script>
-
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
