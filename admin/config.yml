@@ -1,5 +1,5 @@
 backend:
-  name: github
+  name: git-gateway
   repo: JoshZ-zzx/JoshZ-zzx.github.io
   branch: main
 
